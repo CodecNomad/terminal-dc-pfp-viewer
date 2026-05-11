@@ -1,39 +1,23 @@
+mod structs;
+
 use anyhow::{Context, Result};
 use clap::Parser;
 use inquire::Text;
-use serde::{Deserialize, Serialize};
 use serde_json::json;
 use viuer::Config;
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
-#[serde(rename_all = "camelCase")]
-pub struct User {
-    pub id: String,
-    pub username: String,
-    pub discriminator: String,
-    pub global_name: String,
-    pub display_name: String,
-    pub avatar_url: String,
-    pub avatar_download_url: String,
-    pub avatar_webp_url: String,
-    pub avatar_animated: bool,
-    pub banner_url: Option<String>,
-    pub banner_download_url: Option<String>,
-    pub banner_animated: bool,
-    pub accent_color: Option<String>,
-    pub banner_color: Option<String>,
-    pub public_flags: i32,
-    pub created_at: String,
-    pub mention: String,
-    pub is_bot: bool,
-}
+use crate::structs::{api_layout::Root, cli::Cli};
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
-#[serde(rename_all = "camelCase")]
-pub struct Root {
-    pub user: User,
-}
 fn get_url_of_user(id: String) -> Result<String> {
+    let number_id = id
+        .parse::<u64>()
+        .context("Failed to conver string ID to u64 ID, invalid ID.")?;
+
+    // A tiny bit smaller than first theoritical ID
+    if number_id < 0xF4240 {
+        return Err(anyhow::anyhow!("Invalid user ID"));
+    }
+
     let api_response = reqwest::blocking::Client::new()
         .post("https://www.discordpfp.gg/api/discordlookup")
         .body(json!({"discordId": id}).to_string())
@@ -45,13 +29,6 @@ fn get_url_of_user(id: String) -> Result<String> {
         .context("Failed to turn response into json")?;
 
     Ok(json_response.user.avatar_download_url)
-}
-
-#[derive(Parser)]
-#[command(about = "Draws an image from a http/s link into your terminal", long_about = None, version)]
-struct Cli {
-    #[arg(long)]
-    id: Option<String>,
 }
 
 fn parse_cli() -> Result<String> {
@@ -77,7 +54,7 @@ fn main() -> Result<()> {
     let image =
         image::load_from_memory(&image_data).context("Failed to construct image from raw bytes")?;
 
-    let _ = clearscreen::clear();
+    clearscreen::clear().ok();
 
     viuer::print(&image, &Config::default()).context("Failed to print image to terminal")?;
 
