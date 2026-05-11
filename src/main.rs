@@ -9,14 +9,8 @@ use viuer::Config;
 use crate::structs::{api_layout::Root, cli::Cli};
 
 fn get_url_of_user(id: String) -> Result<String> {
-    let number_id = id
-        .parse::<u64>()
+    id.parse::<u64>()
         .context("Failed to conver string ID to u64 ID, invalid ID.")?;
-
-    // A tiny bit smaller than first actual ID
-    if number_id < 0x2386F26FC10000 {
-        return Err(anyhow::anyhow!("Invalid user ID"));
-    }
 
     let api_response = reqwest::blocking::Client::new()
         .post("https://www.discordpfp.gg/api/discordlookup")
