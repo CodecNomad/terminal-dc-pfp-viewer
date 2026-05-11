@@ -2,6 +2,11 @@
 name = "terminal-dc-pfp-viewer"
 version = "0.1.0"
 edition = "2024"
+description = "Display a Discord user's avatar from an ID in your terminal"
+license = "MIT"
+repository = "https://github.com/CodecNomad/terminal-dc-pfp-viewer"
+keywords = ["discord", "avatar", "cli", "terminal"]
+categories = ["command-line-utilities"]
 
 [dependencies]
 anyhow = "1.0.102"
@@ -13,3 +18,7 @@ reqwest = { version = "0.13.3", features = ["blocking", "json"] }
 serde = { version = "1.0.228", features = ["derive"] }
 serde_json = { version = "1.0.149", features = ["preserve_order"] }
 viuer = "0.11.0"
+
+[[bin]]
+name = "terminal-dc-pfp-viewer"
+path = "src/main.rs"
