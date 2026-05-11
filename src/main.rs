@@ -8,6 +8,19 @@ use viuer::Config;
 
 use crate::structs::{api_layout::Root, cli::Cli};
 
+fn parse_cli() -> Result<String> {
+    let parsed_cli = Cli::parse();
+
+    parsed_cli.id.map_or_else(
+        || {
+            Text::new("What's the ID of the user?")
+                .prompt()
+                .context("Failed to ask image URL")
+        },
+        Ok,
+    )
+}
+
 fn get_url_of_user(id: String) -> Result<String> {
     id.parse::<u64>()
         .context("Failed to convert string ID to u64 ID, invalid ID.")?;
@@ -25,18 +38,6 @@ fn get_url_of_user(id: String) -> Result<String> {
     Ok(json_response.user.avatar_download_url)
 }
 
-fn parse_cli() -> Result<String> {
-    let parsed_cli = Cli::parse();
-
-    parsed_cli.id.map_or_else(
-        || {
-            Text::new("What's the ID of the user?")
-                .prompt()
-                .context("Failed to ask image URL")
-        },
-        Ok,
-    )
-}
 fn main() -> Result<()> {
     let id = parse_cli()?;
     let url = get_url_of_user(id)?;
