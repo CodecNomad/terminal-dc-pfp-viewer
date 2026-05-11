@@ -13,8 +13,8 @@ fn get_url_of_user(id: String) -> Result<String> {
         .parse::<u64>()
         .context("Failed to conver string ID to u64 ID, invalid ID.")?;
 
-    // A tiny bit smaller than first theoritical ID
-    if number_id < 0xF4240 {
+    // A tiny bit smaller than first actual ID
+    if number_id < 0x2386F26FC10000 {
         return Err(anyhow::anyhow!("Invalid user ID"));
     }
 
