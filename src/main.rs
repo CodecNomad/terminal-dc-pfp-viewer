@@ -10,7 +10,7 @@ use crate::structs::{api_layout::Root, cli::Cli};
 
 fn get_url_of_user(id: String) -> Result<String> {
     id.parse::<u64>()
-        .context("Failed to conver string ID to u64 ID, invalid ID.")?;
+        .context("Failed to convert string ID to u64 ID, invalid ID.")?;
 
     let api_response = reqwest::blocking::Client::new()
         .post("https://www.discordpfp.gg/api/discordlookup")
