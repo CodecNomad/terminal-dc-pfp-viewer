@@ -35,7 +35,7 @@ fn get_url_of_user(id: String) -> Result<String> {
         .json::<Root>()
         .context("Failed to turn response into json")?;
 
-    Ok(json_response.user.avatar_download_url)
+    Ok(json_response.user.avatar.full_size_url)
 }
 
 fn main() -> Result<()> {
