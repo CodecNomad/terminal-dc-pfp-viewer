@@ -1,3 +1,5 @@
+# OUTDATED, doesn't work anymore.
+
 # Display a Discord user's avatar from an ID in your terminal
 
 ## How to install
