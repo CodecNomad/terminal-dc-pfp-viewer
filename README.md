@@ -1,26 +1,64 @@
-# Display a Discord user's avatar from an ID in your terminal
+# terminal-dc-pfp-viewer
 
-## How to install
-```
+Display a Discord user's avatar in your terminal from a Discord user ID.
+
+## What it does
+
+- Accepts a Discord user ID from `--id` or an interactive prompt
+- Looks up avatar data through `https://www.discordpfp.gg/api/discordlookup`
+- Downloads the full-size avatar image
+- Clears the screen and renders the image directly in your terminal
+
+No Discord token is required.
+
+## Install
+
+```bash
 cargo install terminal-dc-pfp-viewer
 ```
 
-## Ways to use
-### Interactive
+Or build locally:
+
+```bash
+cargo build
 ```
+
+## Usage
+
+Interactive mode (prompts for ID):
+
+```bash
 terminal-dc-pfp-viewer
 ```
 
-### Non-interactive
-```
+Non-interactive mode:
+
+```bash
 terminal-dc-pfp-viewer --id 556610358396321840
 ```
 
-## Notes
-### Disclaimer
-#### This crate relies on a third-party site, so users can look up avatars **WITHOUT** a **DISCORD TOKEN**.
-#### The tool uses the API of a website called https://www.discordpfp.gg. I am not associated with them.
-#### The crate **WILL BREAK** if they decide to update their API. It's incredibly easy to update the tool to use another API.
-### How to fix in case of breakage / how to adapt it to other API providers
-#### You just have to change `src/structs/api_layout.rs` to match the API layout of the third-party site or service you want to use.
-#### After that, change the URL found in `src/main.rs` at line 16, and at line 25 change it to match your API layout.
+Show CLI help:
+
+```bash
+terminal-dc-pfp-viewer --help
+```
+
+## Current project layout
+
+```text
+src/
+├── main.rs                # CLI entrypoint, API call, image download/render flow
+├── structs.rs             # module declarations
+└── structs/
+    ├── cli.rs             # clap CLI definition (`--id`)
+    └── api_layout.rs      # serde models for API response parsing
+```
+
+## Third-party API dependency
+
+This project currently depends on `discordpfp.gg`'s API schema and endpoint. If their API changes, update:
+
+- `src/structs/api_layout.rs` (response schema)
+- `src/main.rs` (endpoint and/or response field usage)
+
+I am not affiliated with `discordpfp.gg`.
